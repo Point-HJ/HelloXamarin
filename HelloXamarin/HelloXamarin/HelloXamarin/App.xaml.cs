@@ -7,9 +7,29 @@ namespace HelloXamarin
 {
 	public partial class App : Application
 	{
-		public App ()
+        private Label arvauksenTulosLabel;
+        private Entry syötekenttä;
+
+        private int oikeaLuku;
+        public App ()
 		{
 			InitializeComponent();
+
+            Random rnd = new Random();
+            oikeaLuku = rnd.Next(1, 21);
+
+            Button arvaaNappi = new Button();
+            arvaaNappi.Text = "Arvaa";
+            arvaaNappi.Clicked += ArvaaNappi_Clicked;
+
+            syötekenttä = new Entry
+            {
+                Keyboard = Keyboard.Numeric,
+                Text = ""
+            };
+
+            arvauksenTulosLabel = new Label();
+            arvauksenTulosLabel.Text = "";
 
             MainPage = new ContentPage
             {
@@ -28,22 +48,33 @@ namespace HelloXamarin
                             Text = "Sovellusverio 1.10",
                             TextColor = Color.SteelBlue,
                         },
-                        new Entry
-                        {
-                            Keyboard = Keyboard.Numeric,
-                            Text = ""
-                        },
-                        new Button
-                        {
-                            Text = "Arvaa!"
-                        }
+                        syötekenttä,
+                        arvaaNappi, 
+                        arvauksenTulosLabel
 
                     }
                 }
             };
 		}
 
-		protected override void OnStart ()
+        private void ArvaaNappi_Clicked(object sender, EventArgs e)
+        {
+            int arvaus = int.Parse(syötekenttä.Text);
+            if (arvaus < oikeaLuku)
+            {
+                arvauksenTulosLabel.Text = "Luku on suurempi.";
+            }
+            else if (arvaus > oikeaLuku)
+            {
+                arvauksenTulosLabel.Text = "Luku on pienempi.";
+            }
+            else if (arvaus == oikeaLuku)
+            {
+                arvauksenTulosLabel.Text = "Jee! Täsmälleen oikea luku!";
+            }
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}
